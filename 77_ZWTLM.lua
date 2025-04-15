@@ -6,6 +6,11 @@ local Remotes = {
 	["InfNightmare"] = ReplicatedStorage.aJv:FindFirstChild("67d0dfdd-f5a4-4eb6-a985-fe9e03e6e245"),
 	["BattleSpeed"] = ReplicatedStorage.aJv:FindFirstChild("d1be8721-efd9-4eba-9592-0231e7255393"),
   ["ClaimBattlepass"] = ReplicatedStorage.aJv:FindFirstChild("14bf0484-eac4-4e6a-84dd-fe82d9baad5c"),
+	["ClaimIndex"] = ReplicatedStorage.aJv:FindFirstChild("74dd9a5d-7b32-43e7-a8a1-225ebf7b045d"),
+	["ResetUpgrade"] = ReplicatedStorage.aJv:FindFirstChild("fc6669f5-49c1-4c35-9abe-6a77494a7f32"),
+	["AddUpgrade"] = ReplicatedStorage.aJv:FindFirstChild("67367a95-f21c-4296-9c17-795351b6f6d3"),
+	["RedeemCode"] = ReplicatedStorage.aJv:FindFirstChild("ebc3bb0d-c6f4-4de1-996f-46eb43e61dba"),
+	["CraftPotion"] = ReplicatedStorage.aJv:FindFirstChild("59a49ed0-d2f5-413d-bd73-d3f74eea2140"),
   ["PlaceTeleport"] = ReplicatedStorage.aJv:FindFirstChild("1733a334-afde-4edf-bc8a-623e9650b04e"),
   ["UseItem"] = ReplicatedStorage.aJv:FindFirstChild("2003b10b-6f70-4bba-82a2-098b35b429d2"),
 }
@@ -218,6 +223,81 @@ local AutoSmallLuckPotionToggle = AutoTab:CreateToggle({
 
 --Auto End--
 
+local UpgradeTab = Window:CreateTab("Upgrades", 17454385185) -- Title, Image
+
+local ResetUpgradeButton = UpgradeTab:CreateButton({
+   Name = "Reset Upgrades",
+   Callback = function()
+        Remotes["ResetUpgrade"]:FireServer()
+   end,
+})
+
+local UpgradeDropdown = UpgradeTab:CreateDropdown({
+   Name = "Upgrades",
+   Options = {"LUCK", "COOLDOWN_REDUCTION", "POTION_DURATION", "BORDER_CHANCE", "BOSS_CHANCE"},
+   CurrentOption = {"LUCK"},
+   MultipleOptions = false,
+   Flag = "UpgradeDropdown", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Options)
+      -- her her
+   end,
+})
+
+local AutoUpgrade = false
+local AutoUpgradeToggle = UpgradeTab:CreateToggle({
+   Name = "Auto Upgrade",
+   CurrentValue = false,
+   Flag = "AutoUpgrade", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+		AutoUpgrade = Value
+        if Value then
+            task.spawn(function()
+                while AutoUpgrade do
+                    wait(0.5)
+                    Remotes["AddUpgrade"]:FireServer(UpgradeDropdown.CurrentOption[1])
+                end
+            end)
+        end
+   end,
+})
+
+
+--Upgrades End--
+
+local CraftTab = Window:CreateTab("Crafting", 17454385185) -- Title, Image
+
+local CraftDropdown = CraftTab:CreateDropdown({
+   Name = "Potions",
+   Options = {"small_luck_potion", "small_cooldown_reduction_potion", "medium_luck_potion", "medium_cooldown_reduction_potion", "large_luck_potion", "large_cooldown_reduction_potion"},
+   CurrentOption = {"small_luck_potion"},
+   MultipleOptions = false,
+   Flag = "CraftDropdown", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Options)
+      -- her her
+   end,
+})
+
+local CraftSlider = CraftTab:CreateSlider({
+   Name = "Craft Amount",
+   Range = {1, 100},
+   Increment = 1,
+   Suffix = "Potions",
+   CurrentValue = 1,
+   Flag = "PotionAmount", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        -- her her
+   end,
+})
+
+local CraftButton = CraftTab:CreateButton({
+   Name = "Craft Potions",
+   Callback = function()
+        Remotes["CraftPotion"]:FireServer(CraftDropdown.CurrentOption[1], CraftSlider.CurrentValue)
+   end,
+})
+
+--Crafts End--
+
 local TeleportTab = Window:CreateTab("Teleport", 17454385185) -- Title, Image
 
 local PlaceDropdown = TeleportTab:CreateDropdown({
@@ -236,11 +316,19 @@ local PlaceDropdown = TeleportTab:CreateDropdown({
 local MiscTab = Window:CreateTab("Miscellaneous", 17454385185) -- Title, Image
 
 local ClaimBattlepassButton = MiscTab:CreateButton({
-   Name = "Claim Battlepass",
+   Name = "Claim Battlepass Rewards",
    Callback = function()
         Remotes["ClaimBattlepass"]:FireServer()
    end,
 })
+
+local ClaimIndexButton = MiscTab:CreateButton({
+   Name = "Claim Card Index",
+   Callback = function()
+        Remotes["ClaimIndex"]:FireServer()
+   end,
+})
+
 local BattleSpeedSlider = MiscTab:CreateSlider({
    Name = "Battle Speed",
    Range = {1, 3},
@@ -275,5 +363,3 @@ local DestroyButton = SettingsTab:CreateButton({
 })
 
 --Settings End--
-
-Rayfield:LoadConfiguration()
