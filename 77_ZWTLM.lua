@@ -5,4 +5,4 @@ game.ReplicatedStorage.B2K:FindFirstChild("4107679d-3b41-4c87-96dd-7fbe6566aa36"
 wait(1)
 game.ReplicatedStorage.B2K:FindFirstChild("f4cd9a60-367a-4407-be6b-bb1ac28900cc"):FireServer()
 
-queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()")
+queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/syntune/pastryhub/refs/heads/main/77_ZWTLM.lua'))()")
